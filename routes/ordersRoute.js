@@ -1,9 +1,15 @@
 const express = require('express');
-const { getOrders } = require('../controllers/ordersController');
+const { getOrders, createOrders, getOrder, updateOrder, currentOrders, deleteOrder} = require('../controllers/ordersController');
 const router = express.Router();
+const validatetoken = require('../middleware/validate');
 
-router.get('/', getOrders   );  
-
+router.use(validatetoken);
+router.get('/', getOrders);  
+router.post('/',createOrders);
+router.get('/:id', getOrder);
+router.put('/:id', updateOrder);
+router.get('/current', currentOrders);
+router.delete('/:id', deleteOrder);
 
 
 module.exports = router;
