@@ -3,16 +3,17 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./config');
 
+
 const app = express();
 const port = 3000;
 
-// db.connect(err => {
-//     if (err) {
-//       console.error('Error connecting to the database: ' + err.message);
-//     } else {
-//       console.log('Connected to the database');
-//     }
-//   });
+db.connect(err => {
+    if (err) {
+      console.error('Error connecting to the database: ' + err.message);
+    } else {
+      console.log('Connected to the database');
+    }
+  });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

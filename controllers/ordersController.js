@@ -1,7 +1,35 @@
 const { get } = require("http");
 const db = require("../config");
+const squelize = require("sequelize");
 
 
+const createOrders = async(req, res)=>{
+  const {
+    companyname,
+    producttype,
+    productname,
+    temprange,
+    pickuplocation,
+    dropofflocation,
+    customersname,
+    customersnumber,
+  } = req.body;
+
+  // Perform data validation specific to the 'deliveries' table here
+
+  const sql =
+    'INSERT INTO orders (companyname, producttype, productname, temprange, pickuplocation, dropofflocation, customersname, customersnumber) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  const values = [
+    companyname,
+    producttype,
+    productname,
+    temprange,
+    pickuplocation,
+    dropofflocation,
+    customersname,
+    customersnumber,
+  ];
+};
 
 const getOrders = async (req, res) => {
     // Define a SQL query to select all orders from the 'orders' table
@@ -19,4 +47,4 @@ const getOrders = async (req, res) => {
     });
   };
 
-module.exports = {getOrders};
+module.exports = {getOrders,createOrders};
