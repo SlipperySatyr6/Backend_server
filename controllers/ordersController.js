@@ -1,6 +1,11 @@
 const db = require("../config");
 const orders = require("../models/orders");
+const users = require("../models/users");
 const createOrderNumber = require("../middleware/ordernumber");
+
+// i want to get the user id from the users table and insert it into the orders table
+
+
 
 
 //@desc     Create a new order
@@ -21,7 +26,7 @@ const createOrders = async (req, res) => {
 
   // Perform data validation specific to the 'orders' table here
   orders.create({
-    userID: req.user,
+    userID: users.id,
     orderID: createOrderNumber,
     companyName, 
     productType,

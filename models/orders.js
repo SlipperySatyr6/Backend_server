@@ -3,6 +3,7 @@ const { DataTypes } = require("sequelize");
 
 const Order = db.define("orders", {
 
+    //userID should be the same as the userID of the user that created the order
     userId: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

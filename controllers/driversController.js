@@ -45,12 +45,13 @@ const registerDriver = async (req, res) => {
     //sending response using try catch
     try {
         if (driver) {
-            res.status(201).json({ _id: driver._id, email: driver.email });
+            res.status(201).json({ _id: driver._id, email: driver.email, 
+                success: true, driver});
         }
     } catch (error) {
         res.status(400).json({ success: false, error: 'Invalid driver data' });
     }
-    res.json({ success: true, driver });
+    // res.json({ success: true, driver });
 };
 //2. loginDriver
 //this function should take in the following parameters:
