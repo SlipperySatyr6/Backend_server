@@ -72,10 +72,14 @@ const loginDriver = async (req, res) => {
             name: drivers.name,
             surname: drivers.surname,
             email: drivers.email,
+            phoneNumber: drivers.phoneNumber,
+            licenseNumber: drivers.licenseNumber,
+            vehicleType: drivers.vehicleType,
         }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10d' });
         console.log(drivers);
         res.json({
             _id: drivers.id,
+
             name: drivers.name,
             surname: drivers.surname,
             token,

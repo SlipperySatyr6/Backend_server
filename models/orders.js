@@ -1,21 +1,21 @@
 const db = require("../config");
 const { DataTypes } = require("sequelize");
+const users = require("./users");
+const drivers = require("./drivers");
 
 const Order = db.define("orders", {
 
     //userID should be the same as the userID of the user that created the order
     userId: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.STRING(100),
         required: true,
         ref: 'User',
-        primaryKey: true,
+        foreignKey: true,
         allowNull: false,
     }, 
 
     orderId: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.STRING(100),
         primaryKey: true,
         allowNull: false,
     },
@@ -59,12 +59,15 @@ const Order = db.define("orders", {
     //driverID will contain the driverID of the driver that is currently delivering the order
     driverId: {
         type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        foreignKey: true,
         ref: 'Driver',
         allowNull: true,
     },
 
 });
+Order.belongsTo(users, { foreignKey: "userId" });
+Order.belongsTo(drivers, { foreignKey: "driverId" });
+
 
 
 module.exports = Order;

@@ -30,7 +30,7 @@ const createUsers = async (req, res) => {
         phoneNumber,
     });
 
-    console.log('User created ${user}');
+    console.log(`User created ${user}`);
     //sending response using try catch
     try {
         if (user) {
@@ -48,29 +48,36 @@ const loginUser = async (req, res) => {
 
     const {email, password } = req.body;
     console.log(email);
-    console.log(   password);
+    console.log(password);
     if (!email || !password) {
         return res.status(400).json({ success: false, error: 'Please provide all the required fields' });
         
     }
     const users = await User.findOne({where: {email}});
-    
+    // Update the specific column (e.g., username)
+    users.logginStatus = true; // Replace with the new value
+    await users.save();
 
-    // console.log({ message: 'loginUser' });
+    //console.log({ message: 'loginUser' });
     //console.log(user);
     //compare password with hashedpassword
-    //const hashedpassword = await bcrypt.hash(password, 10);
+    const hashedpassword = await bcrypt.hash(password, 10);
     // console.log(hashedpassword);
     console.log(users.password);
-    // console.log(password);
-    // if (users && (await bcrypt.compare(password, users.password))) {
+    console.log(password);
+    if (users && (await bcrypt.compare(password, users.password))) 
     // comparing that the password is correct
-    if (users && (password === users.password)) {
+    // if (users && (password === users.password)) 
+    {
         const token = jwt.sign({
             users: {
-                id: users.id,
+                userId: users.userId,
                 name: users.name,
                 surname: users.surname,
+                email: users.email,
+                password: users.password,
+                phoneNumber: users.phoneNumber,
+                logginStatus: users.logginStatus,
             },
         }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10d' });
         console.log(users);
@@ -78,6 +85,7 @@ const loginUser = async (req, res) => {
             _id: users.id,
             name: users.name,
             surname: users.surname,
+            userId: users.userId,
             token,
         });
     } else {
@@ -85,7 +93,7 @@ const loginUser = async (req, res) => {
     }
 };
 
-const getUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
     const users = await User.findAll();
     res.json({ success: true, users });
 };
@@ -99,10 +107,36 @@ const getUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-    const user = await User.findByPk(req.params.id);
-    if (!user) {
+    try {
+      // Get the email and the new value for the specific column from the request
+      const { email } = req.body;
+  
+      const user = await User.findOne({
+        where: { email: email }, // Find the user by email
+      });
+  
+      if (!user) {
         return res.status(404).json({ success: false, error: 'User not found' });
-    } res.json({ success: true, user });
+      }
+  
+      
+  
+      // Save the changes to the database
+      await user.save();
+  
+      res.json({ success: true, user });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };
+  
+
+const getOnlineUsers = async (req, res) => {
+    const users = await User.findAll({
+        where: { logginStatus: true } // Only return users that are online
+    });
+    res.json({ success: true, users });
 };
 
 const currentUser = async (req, res) => {
@@ -112,4 +146,5 @@ const currentUser = async (req, res) => {
     } res.json({ success: true, user });
 };
 
-module.exports = { createUsers, getUsers, getUser, updateUser, currentUser, loginUser };
+
+module.exports = { createUsers, getAllUsers, getUser, updateUser, currentUser, loginUser, getOnlineUsers };

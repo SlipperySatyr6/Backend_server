@@ -5,7 +5,7 @@ const User = db.define("users", {
 
     // userId should be assigned by the validation middleware from the JWT token
     userId: {
-        type: DataTypes.UUID,
+        type: DataTypes.STRING(100),
         defaultValue: DataTypes.UUIDV4,
         required: true,
         primaryKey: true,
@@ -36,6 +36,11 @@ const User = db.define("users", {
         validate:{
             isNumeric: true,
         },
+    },
+    logginStatus: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
     },
 });
 

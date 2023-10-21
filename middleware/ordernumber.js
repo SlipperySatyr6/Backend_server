@@ -3,11 +3,12 @@
 //the function will be called by orders controller when a new order is created.
 
 
-const createOrderNumber = async (req, res) => {
-    const { userId } = req.body;
-    const orderNumber = userId + Date.now();
+
+const createOrderNumber = (userId) => {
+    const orderNumber = `${userId}${Date.now()}`;
     console.log(orderNumber);
-    res.json({ success: true, orderNumber });
+    return orderNumber;
 }
+  
 
 module.exports = createOrderNumber;

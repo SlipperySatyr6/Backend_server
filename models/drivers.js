@@ -58,10 +58,15 @@ const Driver = db.define("drivers", {
     },
     //orderID will contain the orderID of the order that the driver is currently delivering
     orderId: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+        type: DataTypes.STRING(100),
+        defaultValue: null,
+        foreignKey: true,
         allowNull: true,
+    },
+    logginStatus: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
     },
     
 });
